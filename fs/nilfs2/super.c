@@ -48,6 +48,7 @@
 #include <linux/writeback.h>
 #include <linux/seq_file.h>
 #include <linux/mount.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "export.h"
 #include "mdt.h"

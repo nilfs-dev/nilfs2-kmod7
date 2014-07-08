@@ -19,6 +19,7 @@
  */
 #if defined(RHEL_MAJOR) && (RHEL_MAJOR == 7)
 #  define	HAVE_TRUNCATE_INODE_PAGES_FINAL	1
+#  define	HAVE_D_COUNT			1
 #endif
 
 /*
@@ -37,6 +38,14 @@
 # define HAVE_TRUNCATE_INODE_PAGES_FINAL \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
 #endif
+/*
+ * linux-3.11 and later kernels have d_count() function and use it to
+ * get refcount of dentry.
+ */
+#ifndef HAVE_D_COUNT
+# define HAVE_D_COUNT \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -50,6 +59,13 @@ static inline void truncate_inode_pages_final(struct address_space *mapping)
 {
 	if (mapping->nrpages)
 		truncate_inode_pages(mapping, 0);
+}
+#endif
+
+#if !HAVE_D_COUNT
+static inline unsigned d_count(const struct dentry *dentry)
+{
+	return dentry->d_count;
 }
 #endif
 
