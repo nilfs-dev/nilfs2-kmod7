@@ -1,0 +1,15 @@
+nilfs2-kmod-centos7-0.1.0  Wed Jul 9, 2014 JST
+
+	* update project's web site in nilfs2.txt
+	* verify metadata sizes read from disk
+	* add FITRIM ioctl support
+	* add NILFS_IOCTL_SET_SUINFO ioctl support
+	* apply "nilfs2: add comments for ioctls"
+	* apply "nilfs2: use atomic64_t type for inode_count and blocks_count
+	  fields in nilfs_root struct"
+	* apply "nilfs2: implement calculation of tree inodes count"
+	* apply "helper for reading ->d_count"
+	* apply "mm + fs: store shadow entries in pace cache"
+	* add kern_feature.h header file
+	* add .gitignore file
+	* Import source files from stable kernel-3.10.y.
