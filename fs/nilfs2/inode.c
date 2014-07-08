@@ -26,6 +26,7 @@
 #include <linux/mpage.h>
 #include <linux/writeback.h>
 #include <linux/aio.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "btnode.h"
 #include "segment.h"
