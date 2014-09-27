@@ -12,6 +12,7 @@ administration tools, are included in the package.
 * Supported Linux distributions
 
 - Centos 7
+- Scientific Linux 7
 - Vanilla kernel (3.10.y)
 
 Note that the current version of NILFS2 does not work with
