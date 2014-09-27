@@ -1,3 +1,7 @@
+nilfs2-kmod-centos7-0.1.1  Sat Sep 27, 2014 JST
+
+	* fix data loss with mmap()
+
 nilfs2-kmod-centos7-0.1.0  Wed Jul 9, 2014 JST
 
 	* update project's web site in nilfs2.txt
