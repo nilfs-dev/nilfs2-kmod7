@@ -311,6 +311,9 @@ int nilfs_commit_super(struct super_block *sb, int flag)
 					    nilfs->ns_sbsize));
 	}
 	clear_nilfs_sb_dirty(nilfs);
+	nilfs->ns_flushed_device = 1;
+	/* make sure store to ns_flushed_device cannot be reordered */
+	smp_wmb();
 	return nilfs_sync_super(sb, flag);
 }
 
@@ -514,6 +517,9 @@ static int nilfs_sync_fs(struct super_block *sb, int wait)
 		}
 	}
 	up_write(&nilfs->ns_sem);
+
+	if (!err)
+		err = nilfs_flush_device(nilfs);
 
 	return err;
 }
