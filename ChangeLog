@@ -1,3 +1,8 @@
+nilfs2-kmod-centos7-0.1.2  Sun Oct 19, 2014 JST
+
+	* improve the performance of fdatasync()
+	* add missing blkdev_issue_flush() to nilfs_sync_fs()
+
 nilfs2-kmod-centos7-0.1.1  Sat Sep 27, 2014 JST
 
 	* fix data loss with mmap()
