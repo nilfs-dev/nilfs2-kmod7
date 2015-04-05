@@ -1,3 +1,8 @@
+nilfs2-kmod-centos7-0.1.5  Sun Apr 5, 2015 JST
+
+	* fix build error on CentOS 7.1 supporting a change of
+	  truncate_pagecache() function.
+
 nilfs2-kmod-centos7-0.1.4  Fri Mar 13, 2015 JST
 
 	* fix deadlock of segment constructor during recovery
