@@ -20,6 +20,9 @@
 #if defined(RHEL_MAJOR) && (RHEL_MAJOR == 7)
 #  define	HAVE_TRUNCATE_INODE_PAGES_FINAL	1
 #  define	HAVE_D_COUNT			1
+# if (RHEL_MINOR > 0)
+#  define	HAVE_NEW_TRUNCATE_PAGECACHE	1
+# endif
 #endif
 
 /*
@@ -37,6 +40,13 @@
 #ifndef HAVE_TRUNCATE_INODE_PAGES_FINAL
 # define HAVE_TRUNCATE_INODE_PAGES_FINAL \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
+#endif
+/*
+ * oldsize argument of truncate_pagecache() was dropped at linux-3.12.
+ */
+#ifndef HAVE_NEW_TRUNCATE_PAGECACHE
+# define HAVE_NEW_TRUNCATE_PAGECACHE \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0))
 #endif
 /*
  * linux-3.11 and later kernels have d_count() function and use it to
@@ -61,6 +71,16 @@ static inline void truncate_inode_pages_final(struct address_space *mapping)
 		truncate_inode_pages(mapping, 0);
 }
 #endif
+
+static inline void
+nilfs_truncate_pagecache(struct inode *inode, loff_t oldsize, loff_t newsize)
+{
+#if HAVE_NEW_TRUNCATE_PAGECACHE
+	truncate_pagecache(inode, newsize);
+#else
+	truncate_pagecache(inode, oldsize, newsize);
+#endif
+}
 
 #if !HAVE_D_COUNT
 static inline unsigned d_count(const struct dentry *dentry)
