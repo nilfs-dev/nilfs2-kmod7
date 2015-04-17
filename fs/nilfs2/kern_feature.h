@@ -22,6 +22,7 @@
 #  define	HAVE_D_COUNT			1
 # if (RHEL_MINOR > 0)
 #  define	HAVE_NEW_TRUNCATE_PAGECACHE	1
+#  define	HAVE_INODE_SET_FLAGS		1
 # endif
 #endif
 
@@ -70,6 +71,16 @@
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
 #endif
 /*
+ * linux-3.15, later mainline kernels, and some stable kernels have
+ * inode_set_flags() and use it to atomically set i_flags.
+ */
+#ifndef HAVE_INODE_SET_FLAGS
+# define HAVE_INODE_SET_FLAGS \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0) ||		\
+	 (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 34) &&		\
+	  LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)))
+#endif
+/*
  * bi_sector and bi_size were moved into an iterator at linux-3.14.
  */
 #ifndef HAVE_BI_ITER
@@ -111,6 +122,21 @@ static inline void truncate_inode_pages_final(struct address_space *mapping)
 {
 	if (mapping->nrpages)
 		truncate_inode_pages(mapping, 0);
+}
+#endif
+
+#if !HAVE_INODE_SET_FLAGS
+static inline void inode_set_flags(struct inode *inode, unsigned int flags,
+				   unsigned int mask)
+{
+	unsigned int old_flags, new_flags;
+
+	WARN_ON_ONCE(flags & ~mask);
+	do {
+		old_flags = ACCESS_ONCE(inode->i_flags);
+		new_flags = (old_flags & ~mask) | flags;
+	} while (unlikely(cmpxchg(&inode->i_flags, old_flags,
+				  new_flags) != old_flags));
 }
 #endif
 
