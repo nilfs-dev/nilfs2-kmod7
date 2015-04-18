@@ -42,6 +42,13 @@
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
 #endif
 /*
+ * bi_sector and bi_size were moved into an iterator at linux-3.14.
+ */
+#ifndef HAVE_BI_ITER
+# define HAVE_BI_ITER \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
+#endif
+/*
  * oldsize argument of truncate_pagecache() was dropped at linux-3.12.
  */
 #ifndef HAVE_NEW_TRUNCATE_PAGECACHE

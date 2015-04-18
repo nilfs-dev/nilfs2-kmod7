@@ -26,6 +26,7 @@
 #include <linux/crc32.h>
 #include <linux/backing-dev.h>
 #include <linux/slab.h>
+#include "kern_feature.h"
 #include "page.h"
 #include "segbuf.h"
 
@@ -416,7 +417,12 @@ static struct bio *nilfs_alloc_seg_bio(struct the_nilfs *nilfs, sector_t start,
 	}
 	if (likely(bio)) {
 		bio->bi_bdev = nilfs->ns_bdev;
+#if HAVE_BI_ITER
+		bio->bi_iter.bi_sector =
+			start << (nilfs->ns_blocksize_bits - 9);
+#else
 		bio->bi_sector = start << (nilfs->ns_blocksize_bits - 9);
+#endif
 	}
 	return bio;
 }
