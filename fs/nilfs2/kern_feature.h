@@ -8,7 +8,7 @@
 #ifndef NILFS_KERN_FEATURE_H
 #define NILFS_KERN_FEATURE_H
 
-#include <linux/version.h>
+#include <generated/uapi/linux/version.h>
 
 /*
  * Please define as 0/1 here if you want to override
