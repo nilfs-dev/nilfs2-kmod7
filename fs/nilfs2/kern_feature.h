@@ -34,6 +34,13 @@
  */
 #ifdef LINUX_VERSION_CODE
 /*
+ * vm_ops->remap_pages() was removed at Linux 4.0.
+ */
+#ifndef HAVE_VM_OPS_REMAP_PAGES
+# define HAVE_VM_OPS_REMAP_PAGES \
+	(LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
+#endif
+/*
  * linux-3.17 and later kernels have d_obtain_root().
  */
 #ifndef HAVE_D_OBTAIN_ROOT
