@@ -43,6 +43,7 @@
  */
 
 #include <linux/pagemap.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "page.h"
 
@@ -256,22 +257,26 @@ static void nilfs_set_de_type(struct nilfs_dir_entry *de, struct inode *inode)
 	de->file_type = nilfs_type_by_mode[(mode & S_IFMT)>>S_SHIFT];
 }
 
-static int nilfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
+#if HAVE_NEW_READDIR
+static int nilfs_readdir(struct file *file, struct dir_context *ctx)
+#else
+static int nilfs_readdir(struct file *file, void *dirent, filldir_t filldir)
+#endif
 {
-	loff_t pos = filp->f_pos;
-	struct inode *inode = file_inode(filp);
+#if HAVE_NEW_READDIR
+	loff_t pos = ctx->pos;
+#else
+	loff_t pos = file->f_pos;
+#endif
+	struct inode *inode = file_inode(file);
 	struct super_block *sb = inode->i_sb;
 	unsigned int offset = pos & ~PAGE_CACHE_MASK;
 	unsigned long n = pos >> PAGE_CACHE_SHIFT;
 	unsigned long npages = dir_pages(inode);
 /*	unsigned chunk_mask = ~(nilfs_chunk_size(inode)-1); */
-	unsigned char *types = NULL;
-	int ret;
 
 	if (pos > inode->i_size - NILFS_DIR_REC_LEN(1))
-		goto success;
-
-	types = nilfs_filetype_table;
+		return 0;
 
 	for ( ; n < npages; n++, offset = 0) {
 		char *kaddr, *limit;
@@ -281,9 +286,12 @@ static int nilfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 		if (IS_ERR(page)) {
 			nilfs_error(sb, __func__, "bad page in #%lu",
 				    inode->i_ino);
-			filp->f_pos += PAGE_CACHE_SIZE - offset;
-			ret = -EIO;
-			goto done;
+#if HAVE_NEW_READDIR
+			ctx->pos += PAGE_CACHE_SIZE - offset;
+#else
+			file->f_pos += PAGE_CACHE_SIZE - offset;
+#endif
+			return -EIO;
 		}
 		kaddr = page_address(page);
 		de = (struct nilfs_dir_entry *)(kaddr + offset);
@@ -293,35 +301,41 @@ static int nilfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 			if (de->rec_len == 0) {
 				nilfs_error(sb, __func__,
 					    "zero-length directory entry");
-				ret = -EIO;
 				nilfs_put_page(page);
-				goto done;
+				return -EIO;
 			}
 			if (de->inode) {
 				int over;
-				unsigned char d_type = DT_UNKNOWN;
+				unsigned char t;
 
-				if (types && de->file_type < NILFS_FT_MAX)
-					d_type = types[de->file_type];
+				if (de->file_type < NILFS_FT_MAX)
+					t = nilfs_filetype_table[de->file_type];
+				else
+					t = DT_UNKNOWN;
 
+#if HAVE_NEW_READDIR
+				over = !dir_emit(ctx, de->name, de->name_len,
+						le64_to_cpu(de->inode), t);
+#else
 				offset = (char *)de - kaddr;
 				over = filldir(dirent, de->name, de->name_len,
 						(n<<PAGE_CACHE_SHIFT) | offset,
-						le64_to_cpu(de->inode), d_type);
+						le64_to_cpu(de->inode), t);
+#endif
 				if (over) {
 					nilfs_put_page(page);
-					goto success;
+					return 0;
 				}
 			}
-			filp->f_pos += nilfs_rec_len_from_disk(de->rec_len);
+#if HAVE_NEW_READDIR
+			ctx->pos += nilfs_rec_len_from_disk(de->rec_len);
+#else
+			file->f_pos += nilfs_rec_len_from_disk(de->rec_len);
+#endif
 		}
 		nilfs_put_page(page);
 	}
-
-success:
-	ret = 0;
-done:
-	return ret;
+	return 0;
 }
 
 /*
@@ -678,7 +692,11 @@ not_empty:
 const struct file_operations nilfs_dir_operations = {
 	.llseek		= generic_file_llseek,
 	.read		= generic_read_dir,
+#if HAVE_NEW_READDIR
+	.iterate	= nilfs_readdir,
+#else
 	.readdir	= nilfs_readdir,
+#endif
 	.unlocked_ioctl	= nilfs_ioctl,
 #ifdef CONFIG_COMPAT
 	.compat_ioctl	= nilfs_compat_ioctl,

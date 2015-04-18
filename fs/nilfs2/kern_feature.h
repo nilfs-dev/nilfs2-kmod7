@@ -56,6 +56,13 @@
 # define HAVE_D_COUNT \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
 #endif
+/*
+ * linux-3.11 altered readdir() implementation.
+ */
+#ifndef HAVE_NEW_READDIR
+# define HAVE_NEW_READDIR \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
