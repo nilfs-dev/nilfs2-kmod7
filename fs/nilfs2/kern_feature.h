@@ -88,6 +88,13 @@
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
 #endif
 /*
+ * set_mask_bits() was introduced at linux-3.14.
+ */
+#ifndef HAVE_SET_MASK_BITS
+# define HAVE_SET_MASK_BITS \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
+#endif
+/*
  * oldsize argument of truncate_pagecache() was dropped at linux-3.12.
  */
 #ifndef HAVE_NEW_TRUNCATE_PAGECACHE
@@ -117,6 +124,21 @@
 /*
  * definitions dependent to above macros
  */
+#if !HAVE_SET_MASK_BITS
+#define set_mask_bits(ptr, _mask, _bits)	\
+({								\
+	const typeof(*ptr) mask = (_mask), bits = (_bits);	\
+	typeof(*ptr) old, new;					\
+								\
+	do {							\
+		old = ACCESS_ONCE(*ptr);			\
+		new = (old & ~mask) | bits;			\
+	} while (cmpxchg(ptr, old, new) != old);		\
+								\
+	new;							\
+})
+#endif
+
 #if !HAVE_TRUNCATE_INODE_PAGES_FINAL
 static inline void truncate_inode_pages_final(struct address_space *mapping)
 {
