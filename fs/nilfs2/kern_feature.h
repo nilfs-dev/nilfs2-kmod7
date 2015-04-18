@@ -34,6 +34,13 @@
  */
 #ifdef LINUX_VERSION_CODE
 /*
+ * linux-3.16 and later kernels have iov_iter.
+ */
+#ifndef HAVE_IOV_ITER
+# define HAVE_IOV_ITER \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0))
+#endif
+/*
  * linux-3.15 and later kernels have truncate_inode_pages_final()
  * and use it in ->evict_inode() implementation.
  */
