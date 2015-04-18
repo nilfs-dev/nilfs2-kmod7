@@ -27,6 +27,7 @@
 #include <linux/backing-dev.h>
 #include <linux/swap.h>
 #include <linux/slab.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "btnode.h"
 #include "segment.h"
@@ -429,7 +430,9 @@ int nilfs_mdt_init(struct inode *inode, gfp_t gfp_mask, size_t objsz)
 
 	inode->i_mode = S_IFREG;
 	mapping_set_gfp_mask(inode->i_mapping, gfp_mask);
+#if HAVE_MAPPING_BACKING_DEV_INFO
 	inode->i_mapping->backing_dev_info = inode->i_sb->s_bdi;
+#endif
 
 	inode->i_op = &def_mdt_iops;
 	inode->i_fop = &def_mdt_fops;

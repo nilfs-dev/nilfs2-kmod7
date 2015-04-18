@@ -34,6 +34,13 @@
  */
 #ifdef LINUX_VERSION_CODE
 /*
+ * mapping->backing_dev_info was removed at Linux 4.0.
+ */
+#ifndef HAVE_MAPPING_BACKING_DEV_INFO
+# define HAVE_MAPPING_BACKING_DEV_INFO \
+	(LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
+#endif
+/*
  * vm_ops->remap_pages() was removed at Linux 4.0.
  */
 #ifndef HAVE_VM_OPS_REMAP_PAGES

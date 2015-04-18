@@ -30,6 +30,7 @@
 #include <linux/highmem.h>
 #include <linux/pagevec.h>
 #include <linux/gfp.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "page.h"
 #include "mdt.h"
@@ -468,7 +469,9 @@ void nilfs_mapping_init(struct address_space *mapping, struct inode *inode,
 	mapping->flags = 0;
 	mapping_set_gfp_mask(mapping, GFP_NOFS);
 	mapping->private_data = NULL;
+#if HAVE_MAPPING_BACKING_DEV_INFO
 	mapping->backing_dev_info = bdi;
+#endif
 	mapping->a_ops = &empty_aops;
 }
 
