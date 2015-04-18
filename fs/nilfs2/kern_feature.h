@@ -34,6 +34,13 @@
  */
 #ifdef LINUX_VERSION_CODE
 /*
+ * linux-3.17 and later kernels have d_obtain_root().
+ */
+#ifndef HAVE_D_OBTAIN_ROOT
+# define HAVE_D_OBTAIN_ROOT \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 17, 0))
+#endif
+/*
  * linux-3.16 and later kernels have iov_iter.
  */
 #ifndef HAVE_IOV_ITER
@@ -107,6 +114,13 @@ nilfs_truncate_pagecache(struct inode *inode, loff_t oldsize, loff_t newsize)
 static inline unsigned d_count(const struct dentry *dentry)
 {
 	return dentry->d_count;
+}
+#endif
+
+#if !HAVE_D_OBTAIN_ROOT
+static inline struct dentry *d_obtain_root(struct inode *inode)
+{
+	return d_obtain_alias(inode);
 }
 #endif
 
