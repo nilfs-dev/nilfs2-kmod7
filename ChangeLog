@@ -1,3 +1,32 @@
+nilfs2-kmod7-1.0.0  Sun Apr 19, 2015 JST
+
+	* fix gcc warning at nilfs_checkpoint_is_mounted()
+	* fix minor race issue with chattr:
+	  - put out gfp mask manipulation from nilfs_set_inode_flags()
+	  - add mimic of inode_set_flags() helper
+	  - use inode_set_flags() in nilfs_set_inode_flags() to
+	    atomically set inode->i_flags.
+	* support build for recent mainline kernels (v3.10 ~ v4.0):
+	  - fix build error due to relocation of version.h
+	  - fix build error due to change of readdir at Linux 3.11
+	  - fix build error due to change of bio struct at Linux 3.14
+	  - fix build error due to change related to iov iterator at Linux 3.16
+	  - use d_obtain_root() and add its compat function
+	  - fix build error due to removal of vm_ops->remap_pages()
+	  - fix build error due to removal of mapping->backing_dev_info
+	* improve execution time of lscp command on aged file systems:
+	  - unify type of key arguments in bmap interface
+	  - add bmap function to seek a valid key
+	  - add helper to find existent block on metadata file
+	  - improve execution time of NILFS_IOCTL_GET_CPINFO ioctl
+	* reduce the number of atomic bit operations with set_mask_bits
+	  helper:
+	  - do not use async write flag for segment summary buffers
+	  - add mimic of set_mask_bits() helper
+	  - use set_mask_bits() for operations on buffer state bitmap
+	* cleanup:
+	  - use bgl_lock_ptr() helper to simplify nilfs_mdt_bgl_lock()
+
 nilfs2-kmod-centos7-0.1.5  Sun Apr 5, 2015 JST
 
 	* fix build error on CentOS 7.1 supporting a change of
