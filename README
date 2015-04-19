@@ -13,7 +13,7 @@ administration tools, are included in the package.
 
 - CentOS 7
 - Scientific Linux 7
-- Vanilla kernel (3.10.y)
+- Vanilla kernel (3.10.y ~ 4.0.y)
 
 Note that the current version of NILFS2 does not work with
 SELinux-enabled systems because extended attributes are not supported
