@@ -137,6 +137,13 @@
 # define HAVE_WAIT_FOR_STABLE_PAGE \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
 #endif
+/*
+ * FILEID_INVALID was introduced in kernel 3.8
+ */
+#ifndef HAVE_FILEID_INVALID
+# define HAVE_FILEID_INVALID \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -224,6 +231,10 @@ static inline void wait_for_stable_page(struct page *page)
 {
 	wait_on_page_writeback(page);
 }
+#endif
+
+#if !HAVE_FILEID_INVALID
+# define FILEID_INVALID	0xff
 #endif
 
 #endif /* NILFS_KERN_FEATURE_H */

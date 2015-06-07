@@ -39,6 +39,7 @@
  */
 
 #include <linux/pagemap.h>
+#include "kern_feature.h"
 #include "nilfs.h"
 #include "export.h"
 
