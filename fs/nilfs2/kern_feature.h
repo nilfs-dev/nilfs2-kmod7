@@ -116,6 +116,13 @@
 # define HAVE_NEW_READDIR \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
 #endif
+/*
+ * file_inode() accessor was introduced in kernel 3.9
+ */
+#ifndef HAVE_FILE_INODE
+# define HAVE_FILE_INODE \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -183,6 +190,13 @@ static inline unsigned d_count(const struct dentry *dentry)
 static inline struct dentry *d_obtain_root(struct inode *inode)
 {
 	return d_obtain_alias(inode);
+}
+#endif
+
+#if !HAVE_FILE_INODE
+static inline struct inode *file_inode(struct file *f)
+{
+	return f->f_dentry->d_inode;
 }
 #endif
 
