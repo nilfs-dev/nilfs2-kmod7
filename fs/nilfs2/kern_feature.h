@@ -8,7 +8,10 @@
 #ifndef NILFS_KERN_FEATURE_H
 #define NILFS_KERN_FEATURE_H
 
-#include <generated/uapi/linux/version.h>
+#include <linux/version.h>
+#ifndef LINUX_VERSION_CODE
+# include <generated/uapi/linux/version.h>
+#endif
 
 /*
  * Please define as 0/1 here if you want to override
@@ -42,11 +45,13 @@
 	(LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
 #endif
 /*
- * vm_ops->remap_pages() was removed at Linux 4.0.
+ * vm_ops->remap_pages() was introduced in kernel 3.7 and removed in
+ * kernel 4.0.
  */
 #ifndef HAVE_VM_OPS_REMAP_PAGES
 # define HAVE_VM_OPS_REMAP_PAGES \
-	(LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 7, 0) &&		\
+	 LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0))
 #endif
 /*
  * linux-3.17 and later kernels have d_obtain_root().
