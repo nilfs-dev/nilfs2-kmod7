@@ -144,6 +144,14 @@
 # define HAVE_FILEID_INVALID \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
 #endif
+/*
+ * In kernel 3.8, assoc_mapping member of struct address_space was
+ * replaced with a void pointer type member "private_data".
+ */
+#ifndef HAVE_MAPPING_PRIVATE_DATA
+# define HAVE_MAPPING_PRIVATE_DATA \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
