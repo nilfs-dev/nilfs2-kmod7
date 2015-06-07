@@ -123,6 +123,13 @@
 # define HAVE_FILE_INODE \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
 #endif
+/*
+ * MODULE_ALIAS_FS() macro was introduced in kernel 3.9
+ */
+#ifndef HAVE_MODULE_ALIAS_FS
+# define HAVE_MODULE_ALIAS_FS \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -198,6 +205,10 @@ static inline struct inode *file_inode(struct file *f)
 {
 	return f->f_dentry->d_inode;
 }
+#endif
+
+#if !HAVE_MODULE_ALIAS_FS
+# define MODULE_ALIAS_FS(NAME) MODULE_ALIAS("fs-" NAME)
 #endif
 
 #endif /* NILFS_KERN_FEATURE_H */
