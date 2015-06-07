@@ -164,6 +164,14 @@
 # define HAVE_VM_CAN_NONLINEAR \
 	(LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0))
 #endif
+/*
+ * __block_page_mkwrite() doesn't call file_update_time() since kernel
+ * 3.7
+ */
+#ifndef HAVE_FILE_UPDATE_TIME_IN_BLOCK_PAGE_MKWRITE
+# define HAVE_FILE_UPDATE_TIME_IN_BLOCK_PAGE_MKWRITE \
+	(LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
