@@ -130,9 +130,17 @@
 # define HAVE_MODULE_ALIAS_FS \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
 #endif
+/*
+ * wait_for_stable_page() was introduced in kernel 3.9
+ */
+#ifndef HAVE_WAIT_FOR_STABLE_PAGE
+# define HAVE_WAIT_FOR_STABLE_PAGE \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
+#include <linux/pagemap.h>
 #include <linux/fs.h>
 
 /*
@@ -209,6 +217,13 @@ static inline struct inode *file_inode(struct file *f)
 
 #if !HAVE_MODULE_ALIAS_FS
 # define MODULE_ALIAS_FS(NAME) MODULE_ALIAS("fs-" NAME)
+#endif
+
+#if !HAVE_WAIT_FOR_STABLE_PAGE
+static inline void wait_for_stable_page(struct page *page)
+{
+	wait_on_page_writeback(page);
+}
 #endif
 
 #endif /* NILFS_KERN_FEATURE_H */
