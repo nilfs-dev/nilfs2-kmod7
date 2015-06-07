@@ -143,6 +143,9 @@ static int nilfs_file_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	file_accessed(file);
 	vma->vm_ops = &nilfs_file_vm_ops;
+#if HAVE_VM_CAN_NONLINEAR
+	vma->vm_flags |= VM_CAN_NONLINEAR;
+#endif
 	return 0;
 }
 

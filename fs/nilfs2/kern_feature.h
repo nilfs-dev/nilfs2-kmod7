@@ -157,6 +157,13 @@
 # define HAVE_MAPPING_PRIVATE_DATA \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
 #endif
+/*
+ * VM_CAN_NONLINEAR flag was removed in kernel 3.7.0
+ */
+#ifndef HAVE_VM_CAN_NONLINEAR
+# define HAVE_VM_CAN_NONLINEAR \
+	(LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
