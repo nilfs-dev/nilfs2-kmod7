@@ -1,3 +1,28 @@
+nilfs2-kmod7-1.1.0  Sun Nov 8, 2015 JST
+
+	* resolve decline of the available disk space due to bloat of DAT
+	  metadata file
+	  - add helper functions to delete blocks from dat file
+	  - free unused dat file blocks during garbage collection
+	* refactor bitmap based object allocator/deallocator
+	  - use nilfs_warning() in allocator implementation
+	  - do not call nilfs_mdt_bgl_lock() needlessly
+	  - refactor nilfs_palloc_find_available_slot()
+	  - get rid of nilfs_palloc_group_is_in()
+	* fix sanity check of btree level in nilfs_btree_root_broken()
+	* support NFSv2 export
+	* support vanilla kernel 3.6 ~ 3.9
+	  - Add compat function of file_inode()
+	  - Add mimic of MODULE_ALIAS_FS macro
+	  - Add compat function of wait_for_stable_page()
+	  - Add FILEID_INVALID macro
+	  - Fix build failure of nilfs_mapping_init() in kernel 3.7
+	  - Fix build error due to addition of vm_ops->remap_pages()
+	  - Set VM_CAN_NONLINIEAR to vm_flags in kernel 3.6 and earlier
+	  - Only call file_update_time() in nilfs_page_mkwrite() for kernel
+	    3.7+
+	  - README: include vanilla kernel 3.6+ to supported versions
+
 nilfs2-kmod7-1.0.0  Sun Apr 19, 2015 JST
 
 	* fix gcc warning at nilfs_checkpoint_is_mounted()
