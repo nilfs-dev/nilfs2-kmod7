@@ -2005,7 +2005,7 @@ static int nilfs_segctor_do_construct(struct nilfs_sc_info *sci, int mode)
 			goto failed_to_write;
 
 		if (sci->sc_stage.scnt == NILFS_ST_DONE ||
-		    nilfs->ns_blocksize_bits != PAGE_CACHE_SHIFT) {
+		    nilfs->ns_blocksize_bits != PAGE_SHIFT) {
 			/*
 			 * At this point, we avoid double buffering
 			 * for blocksize < pagesize because page dirty
