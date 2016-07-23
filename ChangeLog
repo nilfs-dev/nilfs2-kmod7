@@ -1,3 +1,18 @@
+nilfs2-kmod7-1.1.1  Sat Jul 23, 2016 JST
+
+	* fix potential underflow in call to crc32_le
+	* do not emit extra newline on nilfs_warning() and nilfs_error()
+	* fix coding style issues
+	  - remove FSF mailing address from GPL notices
+	  - remove space before comma
+	  - remove space before semicolon
+	  - add missing line spacing
+	  - fix code indent coding style issue
+	  - remove unnecessary else after return or break
+	  - remove loops of single statement macros
+	* cleanup:
+	  - clean up old e-mail addresses
+
 nilfs2-kmod7-1.1.0  Sun Nov 8, 2015 JST
 
 	* resolve decline of the available disk space due to bloat of DAT
