@@ -1,3 +1,10 @@
+nilfs2-kmod7-1.1.2  Sat Nov 18, 2017 JST
+
+	* fix race condition that causes file system corruption
+	* fix a coding style issue:
+	  - align block comments of nilfs_sufile_truncate_range() at *
+	* README: replace the repository name in examples with nilfs2-kmod7
+
 nilfs2-kmod7-1.1.1  Sat Jul 23, 2016 JST
 
 	* fix potential underflow in call to crc32_le
