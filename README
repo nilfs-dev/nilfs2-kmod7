@@ -22,11 +22,11 @@ yet.
 * How to get development sources
 
  $ cd your-work-directory
- $ git clone git://github.com/nilfs-dev/nilfs2-kmod-centos7.git
+ $ git clone git://github.com/nilfs-dev/nilfs2-kmod7.git
 
 * How to compile
 
- $ cd nilfs2-kmod-centos7
+ $ cd nilfs2-kmod7
  $ make
 
 * How to install
