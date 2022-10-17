@@ -17,10 +17,10 @@ list-$(CONFIG_NILFS2_FS) += nilfs2
 
 # Some assembler options.
 ifneq ($(CONFIG_NILFS_DEBUG),)
-  EXTRA_CFLAGS += -g -fno-omit-frame-pointer
+  KBUILD_CFLAGS += -g -fno-omit-frame-pointer
 endif
 
-EXTRA_CFLAGS += -I ../../include
+LINUXINCLUDE += -I../../include
 
 #
 # Only support external build, and does not support kernel build.
@@ -28,11 +28,11 @@ EXTRA_CFLAGS += -I ../../include
 ifneq ($(KERNELRELEASE),)
 
 ifeq ($(EXTERNAL_BUILD),y)
-  EXTRA_CFLAGS += -U CONFIG_NILFS_XATTR       # not supported yet
-  EXTRA_CFLAGS += -U CONFIG_NILFS_POSIX_ACL   # not supported yet
+  KBUILD_CFLAGS += -U CONFIG_NILFS_XATTR       # not supported yet
+  KBUILD_CFLAGS += -U CONFIG_NILFS_POSIX_ACL   # not supported yet
 
   ifneq ($(CONFIG_NILFS_DEBUG),)
-    EXTRA_CFLAGS += -D CONFIG_NILFS_DEBUG
+    KBUILD_CFLAGS += -D CONFIG_NILFS_DEBUG
   endif
 endif
 
