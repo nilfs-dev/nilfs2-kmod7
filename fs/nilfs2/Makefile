@@ -20,8 +20,19 @@ ifneq ($(CONFIG_NILFS_DEBUG),)
   KBUILD_CFLAGS += -g -fno-omit-frame-pointer
 endif
 
+KVER := $(shell uname -r)
+KSRC := /lib/modules/$(KVER)/build
+
 USERINCLUDE += -I../../include/uapi
 LINUXINCLUDE += -I../../include
+
+# RHEL release number
+_SEDCMD := '/^RHEL_RELEASE\s*=\s*[0-9]+/{s/^[^=]+=\s*([0-9]+).*$$/\1/;p;q;}'
+RHEL_RELEASE_N := $(shell sed -nE $(_SEDCMD) $(KSRC)/Makefile)
+
+ifneq ($(RHEL_RELEASE_N),)
+  KBUILD_CFLAGS += -D RHEL_RELEASE_N=$(RHEL_RELEASE_N)
+endif
 
 #
 # Only support external build, and does not support kernel build.
@@ -43,8 +54,6 @@ else  # KERNELRELEASE
 # Description for external build begins here
 #
 
-KVER := $(shell uname -r)
-KSRC := /lib/modules/$(KVER)/build
 MDIR := /lib/modules/$(KVER)/kernel/fs/nilfs2/
 PWD := $(shell pwd)
 
