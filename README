@@ -3,7 +3,7 @@
 - GCC
 - GNU make
 - GNU binutils
-- Kernel headers (kernel-headers)
+- kernel-devel package
 
 You also need to install nilfs-utils package.  The garbage collector
 of NILFS, snapshot management tools, man-pages, and other filesystem
