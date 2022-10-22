@@ -1,3 +1,41 @@
+nilfs2-kmod7-1.2.0  Sun Oct 23, 2022 JST
+
+	* backport bug fixes:
+	  - nilfs2: fix leak of nilfs_root in case of writer thread creation
+	    failure
+	  - nilfs2: fix use-after-free bug of struct nilfs_root
+	  - nilfs2: fix NULL pointer dereference at
+	    nilfs_bmap_lookup_at_level()
+	  - nilfs2: replace WARN_ONs by nilfs_error for checkpoint acquisition
+	    failure
+	* backport SPDX license tags, etc:
+	  - License cleanup: add SPDX license identifier to uapi header files
+	    with a license
+	  - nilfs2: convert to SPDX license tags
+	  - nilfs2: clarify permission to replicate the design
+	* backport improved logging helpers:
+	  - nilfs2: convert __nilfs_msg to integrate the level and format
+	  - nilfs2: use a more common logging style
+	  - nilfs2: reduce bare use of printk() with nilfs_msg()
+	  - nilfs2: replace nilfs_warning() with nilfs_msg()
+	  - nilfs2: emit error message when I/O error is detected
+	  - nilfs2: add nilfs_msg() message interface
+	  - nilfs2: hide function name argument from nilfs_error()
+	* backport uapi header files support:
+	  - nilfs2: move ioctl interface and disk layout to uapi separately
+	  - nilfs2: do not use unexported cpu_to_le32()/le32_to_cpu() in uapi
+	    header
+	* backport various changes for easier future maintenance:
+	  - nilfs2: move cleanup code of metadata file from inode routines
+	  - nilfs2: avoid bare use of 'unsigned'
+	  - nilfs2: fix block comments
+	  - nilfs2: embed a back pointer to super block instance in nilfs
+	    object
+	  - nilfs2: refactor parser of snapshot mount option
+	  - nilfs2: get rid of nilfs_mdt_mark_block_dirty()
+	  - mm, fs: get rid of PAGE_CACHE_* and page_cache_{get,release} macros
+	  - git simplify nilfs check for busy subtree
+
 nilfs2-kmod7-1.1.3  Sat Oct 22, 2022 JST
 
 	* backport bug fixes
