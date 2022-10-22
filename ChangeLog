@@ -1,3 +1,23 @@
+nilfs2-kmod7-1.1.3  Sat Oct 22, 2022 JST
+
+	* backport bug fixes
+	  - nilfs2: fix use-after-free bug in nilfs_mdt_destroy()
+	  - nilfs2: fix incorrect masking of permission flags for symlinks
+	  - nilfs2: use refcount_dec_and_lock() to fix potential UAF
+	  - nilfs2: only call unlock_new_inode() if I_NEW
+	* backport other changes:
+	  - Allow to use refcount type
+	  - fs, nilfs: convert nilfs_root.count from atomic_t to refcount_t
+	  - nilfs2: deletion of an unnecessary check before the function call
+	    "iput"
+	* Makefile updates:
+	  - nilfs2-kmod7: pass RHEL release number to preprocessor
+	  - nilfs2-kmod7: include header files in local include/uapi directory
+	  - Use KBUILD_EXTMOD instead of SUBDIRS in fs/nilfs2/Makefile
+	  - Use KBUILD_CFLAGS and LINUXINCLUDE instead of EXTRA_CFLAGS
+	* README: update git repository url
+	* README: fix the list of required packages
+
 nilfs2-kmod7-1.1.2  Sat Nov 18, 2017 JST
 
 	* fix race condition that causes file system corruption
