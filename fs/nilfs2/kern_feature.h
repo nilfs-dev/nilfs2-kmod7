@@ -27,6 +27,10 @@
 #  define	HAVE_NEW_TRUNCATE_PAGECACHE	1
 #  define	HAVE_INODE_SET_FLAGS		1
 # endif
+# if (RHEL_MINOR > 4)
+#  define	HAVE_ATOMIC_OPS_VARIANTS	1
+#  define	HAVE_REFCOUNT_TYPE		1
+# endif
 #endif
 
 /*
@@ -172,6 +176,21 @@
 # define HAVE_FILE_UPDATE_TIME_IN_BLOCK_PAGE_MKWRITE \
 	(LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0))
 #endif
+/*
+ * Variants of some atomic operations such as atomic_cmpxchg were
+ * added in kernel 4.2.
+ */
+#ifndef HAVE_ATOMIC_OPS_VARIANTS
+# define HAVE_ATOMIC_OPS_VARIANTS \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0))
+#endif
+/*
+ * The refcount type was introduced in kernel 4.10.
+ */
+#ifndef HAVE_REFCOUNT_TYPE
+# define HAVE_REFCOUNT_TYPE \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -264,5 +283,105 @@ static inline void wait_for_stable_page(struct page *page)
 #if !HAVE_FILEID_INVALID
 # define FILEID_INVALID	0xff
 #endif
+
+#if !HAVE_REFCOUNT_TYPE
+#include <linux/atomic.h>
+#include <linux/spinlock.h>
+
+#if !HAVE_ATOMIC_OPS_VARIANTS
+#include <asm/barrier.h>
+
+#define __atomic_op_release(op, args...)				\
+({									\
+	smp_mb__before_atomic();					\
+	op##_relaxed(args);						\
+})
+
+#define __atomic_op_fence(op, args...)					\
+({									\
+	typeof(op##_relaxed(args)) __ret;				\
+	smp_mb__before_atomic();					\
+	__ret = op##_relaxed(args);					\
+	smp_mb__after_atomic();						\
+	__ret;								\
+})
+
+#ifndef atomic_cmpxchg_relaxed
+#define  atomic_cmpxchg_release			atomic_cmpxchg
+#else /* atomic_cmpxchg_relaxed */
+
+#ifndef atomic_cmpxchg_release
+#define  atomic_cmpxchg_release(...)					\
+	__atomic_op_release(atomic_cmpxchg, __VA_ARGS__)
+#endif /* atomic_cmpxchg_release */
+
+#ifndef atomic_cmpxchg
+#define  atomic_cmpxchg(...)						\
+	__atomic_op_fence(atomic_cmpxchg, __VA_ARGS__)
+#endif
+#endif /* atomic_cmpxchg_relaxed */
+#endif /* !HAVE_ATOMIC_OPS_VARIANTS */
+
+typedef struct refcount_struct {
+	atomic_t refs;
+} refcount_t;
+
+static inline void refcount_set(refcount_t *r, unsigned int n)
+{
+	atomic_set(&r->refs, n);
+}
+
+static inline void refcount_inc(refcount_t *r)
+{
+	atomic_inc(&r->refs);
+}
+
+static inline __must_check bool refcount_dec_and_test(refcount_t *r)
+{
+	return atomic_dec_and_test(&r->refs);
+}
+
+static inline __must_check bool refcount_dec_not_one(refcount_t *r)
+{
+	unsigned int old, new, val = atomic_read(&r->refs);
+
+	for (;;) {
+		if (unlikely(val == UINT_MAX))
+			return true;
+
+		if (val == 1)
+			return false;
+
+		new = val - 1;
+		if (new > val) {
+			WARN_ONCE(new > val, "refcount_t: underflow; use-after-free.\n");
+			return true;
+		}
+
+		old = atomic_cmpxchg_release(&r->refs, val, new);
+		if (old == val)
+			break;
+
+		val = old;
+	}
+
+	return true;
+}
+
+static inline __must_check
+bool refcount_dec_and_lock(refcount_t *r, spinlock_t *lock)
+{
+	if (refcount_dec_not_one(r))
+		return false;
+
+	spin_lock(lock);
+	if (!refcount_dec_and_test(r)) {
+		spin_unlock(lock);
+		return false;
+	}
+
+	return true;
+}
+#endif /* !HAVE_REFCOUNT_TYPE */
 
 #endif /* NILFS_KERN_FEATURE_H */
