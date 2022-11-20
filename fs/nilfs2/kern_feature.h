@@ -191,6 +191,13 @@
 # define HAVE_REFCOUNT_TYPE \
 	(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0))
 #endif
+/*
+ * sb_rdonly() was added in kernel 4.13.
+ */
+#ifndef HAVE_SB_RDONLY
+# define HAVE_SB_RDONLY \
+	(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 13, 0))
+#endif
 #endif /* LINUX_VERSION_CODE */
 
 
@@ -383,5 +390,12 @@ bool refcount_dec_and_lock(refcount_t *r, spinlock_t *lock)
 	return true;
 }
 #endif /* !HAVE_REFCOUNT_TYPE */
+
+#if !HAVE_SB_RDONLY
+static inline bool sb_rdonly(const struct super_block *sb)
+{
+	return sb->s_flags & MS_RDONLY;
+}
+#endif
 
 #endif /* NILFS_KERN_FEATURE_H */
