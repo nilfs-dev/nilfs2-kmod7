@@ -1,3 +1,11 @@
+nilfs2-kmod7-1.2.1  Sun Nov 20, 2022 JST
+
+	* backport bug fixes:
+	  - nilfs2: fix deadlock in nilfs_count_free_blocks()
+	  - nilfs2: fix use-after-free bug of ns_writer on remount
+	* backport change for maintenance:
+	  - Allow to use sb_rdonly()
+
 nilfs2-kmod7-1.2.0  Sun Oct 23, 2022 JST
 
 	* backport bug fixes:
