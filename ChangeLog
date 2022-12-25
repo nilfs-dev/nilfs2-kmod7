@@ -1,3 +1,11 @@
+nilfs2-kmod7-1.2.3  Sun Dec 25, 2022 JST
+
+	* backport the fixes for potential shift-out-of-bounds issues at mount
+	  time against corrupted disk images:
+	  - nilfs2: fix shift-out-of-bounds/overflow in nilfs_sb2_bad_offset()
+	  - nilfs2: fix shift-out-of-bounds due to too large exponent of block
+	    size
+
 nilfs2-kmod7-1.2.2  Mon Dec 5, 2022 JST
 
 	* backport bug fixes:
