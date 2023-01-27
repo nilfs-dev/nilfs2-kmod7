@@ -181,6 +181,15 @@ int nilfs_dat_prepare_end(struct inode *dat, struct nilfs_palloc_req *req)
 			return ret;
 		}
 	}
+	if (unlikely(start > nilfs_mdt_cno(dat))) {
+		nilfs_err(dat->i_sb,
+			  "vblocknr = %llu has abnormal lifetime: start cno (= %llu) > current cno (= %llu)",
+			  (unsigned long long)req->pr_entry_nr,
+			  (unsigned long long)start,
+			  (unsigned long long)nilfs_mdt_cno(dat));
+		nilfs_dat_abort_entry(dat, req);
+		return -EINVAL;
+	}
 
 	return 0;
 }
