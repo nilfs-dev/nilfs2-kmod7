@@ -1,3 +1,12 @@
+nilfs2-kmod7-1.2.4  Sun Feb 19, 2023 JST
+
+	* backport fixes for general protection faults on corrupted disk
+	  images, an out-of-bounds block access issue on empty or very small
+	  devices, bad segment counts and a writer thread hang issue after
+	  attempting to resize to very small sizes:
+	  - nilfs2: fix general protection fault in nilfs_btree_insert()
+	  - nilfs2: fix underflow in second superblock position calculations
+
 nilfs2-kmod7-1.2.3  Sun Dec 25, 2022 JST
 
 	* backport the fixes for potential shift-out-of-bounds issues at mount
