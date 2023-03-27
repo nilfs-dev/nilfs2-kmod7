@@ -1,3 +1,12 @@
+nilfs2-kmod7-1.2.5  Mon Mar 27, 2023 JST
+
+	* backport fixes for a potential kernel information leak when
+	  specifying anomalous ioctl parameters:
+	  - nilfs2: fix kernel-infoleak in nilfs_ioctl_wrap_copy()
+	* backport improved anomaly checks for corrupted disk images:
+	  - nilfs2: prevent WARNING in nilfs_dat_commit_end()
+	  - nilfs2: replace WARN_ONs for invalid DAT metadata block requests
+
 nilfs2-kmod7-1.2.4  Sun Feb 19, 2023 JST
 
 	* backport fixes for general protection faults on corrupted disk
