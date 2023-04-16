@@ -1,3 +1,11 @@
+nilfs2-kmod7-1.2.6  Sun Apr 16, 2023 JST
+
+	* backport fixes for a potential use-after-free read issue and
+	  missing segment summary data initialization:
+	  - nilfs2: initialize "struct nilfs_binfo_dat"->bi_pad field
+	  - nilfs2: fix potential UAF of struct nilfs_sc_info in
+	    nilfs_segctor_thread()
+
 nilfs2-kmod7-1.2.5  Mon Mar 27, 2023 JST
 
 	* backport fixes for a potential kernel information leak when
