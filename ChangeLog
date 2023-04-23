@@ -1,3 +1,8 @@
+nilfs2-kmod7-1.2.7  Sun Apr 23, 2023 JST
+
+	* backport another missing block initialization fix:
+	  - nilfs2: initialize unused bytes in segment summary blocks
+
 nilfs2-kmod7-1.2.6  Sun Apr 16, 2023 JST
 
 	* backport fixes for a potential use-after-free read issue and
