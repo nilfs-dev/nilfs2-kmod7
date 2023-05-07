@@ -1,3 +1,10 @@
+nilfs2-kmod7-1.2.8  Sun May 7, 2023 JST
+
+	* backport fixes for kernel hangs and writes even after read-only
+	  degeneration:
+	  - nilfs2: do not write dirty data after degenerating to read-only
+	  - nilfs2: fix infinite loop in nilfs_mdt_get_block()
+
 nilfs2-kmod7-1.2.7  Sun Apr 23, 2023 JST
 
 	* backport another missing block initialization fix:
