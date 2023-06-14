@@ -204,6 +204,13 @@
 #include <linux/pagemap.h>
 #include <linux/fs.h>
 
+
+#ifndef U64_MAX
+# define U64_MAX	((u64)~0ULL)
+# define S64_MAX	((s64)(U64_MAX >> 1))
+# define S64_MIN	((s64)(-S64_MAX - 1))
+#endif
+
 /*
  * definitions dependent to above macros
  */
