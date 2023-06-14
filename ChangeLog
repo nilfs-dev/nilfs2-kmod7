@@ -1,3 +1,17 @@
+nilfs2-kmod7-1.2.9  Wed Jun 14, 2023 JST
+
+	* backport recent fixes for various issues reported by syzbot:
+	  - nilfs2: fix use-after-free bug of nilfs_root in nilfs_evict_inode()
+	  - nilfs2: reject devices with insufficient block count
+	  - nilfs2: fix possible out-of-bounds segment allocation in resize
+	    ioctl
+	  - nilfs2: fix incomplete buffer cleanup in
+	    nilfs_btnode_abort_change_key()
+	* add some new macro and inline function compatibility definitions for
+	  maintenance:
+	  - Allow to use U64_MAX and similar definitions
+	  - Allow to use bdev_nr_bytes() and sb_bdev_nr_blocks()
+
 nilfs2-kmod7-1.2.8  Sun May 7, 2023 JST
 
 	* backport fixes for kernel hangs and writes even after read-only
