@@ -1,3 +1,11 @@
+nilfs2-kmod7-1.2.10  Sat Jun 24, 2023 JST
+
+	* backport fixes for general protection faults on corrupted disk images
+	  and buffer corruption issues caused by concurrent device reads:
+	  - nilfs2: prevent general protection fault in
+	    nilfs_clear_dirty_page()
+	  - nilfs2: fix buffer corruption due to concurrent device reads
+
 nilfs2-kmod7-1.2.9  Wed Jun 14, 2023 JST
 
 	* backport recent fixes for various issues reported by syzbot:
