@@ -1,3 +1,12 @@
+nilfs2-kmod7-1.2.11  Sun Sep 3, 2023 JST
+
+	* backport fixes for general protection fault and kernel warning
+	  issues reported by syzbot:
+	  - nilfs2: fix general protection fault in
+	    nilfs_lookup_dirty_data_buffers()
+	  - nilfs2: fix WARNING in mark_buffer_dirty due to discarded buffer
+	    reuse
+
 nilfs2-kmod7-1.2.10  Sat Jun 24, 2023 JST
 
 	* backport fixes for general protection faults on corrupted disk images
