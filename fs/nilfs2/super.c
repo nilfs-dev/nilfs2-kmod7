@@ -54,7 +54,7 @@ MODULE_AUTHOR("NTT Corp.");
 MODULE_DESCRIPTION("A New Implementation of the Log-structured Filesystem "
 		   "(NILFS)");
 MODULE_LICENSE("GPL");
-MODULE_VERSION("nilfs2-kmod7-1.2.11");
+MODULE_VERSION("nilfs2-kmod7-1.2.12");
 
 static struct kmem_cache *nilfs_inode_cachep;
 struct kmem_cache *nilfs_transaction_cachep;

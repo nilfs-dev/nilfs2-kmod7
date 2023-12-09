@@ -1,3 +1,13 @@
+nilfs2-kmod7-1.2.12  Sat Dec 9, 2023 JST
+
+	* backport fixes for a potential use-after-free issue, problems
+	  including memory access violations due to lack of block size error
+	  handling, and a bug reported by syzbot:
+	  - nilfs2: fix potential use after free in
+	    nilfs_gccache_submit_read_data()
+	  - nilfs2: fix missing error check for sb_set_blocksize call
+	  - nilfs2: prevent WARNING in nilfs_sufile_set_segment_usage()
+
 nilfs2-kmod7-1.2.11  Sun Sep 3, 2023 JST
 
 	* backport fixes for general protection fault and kernel warning
