@@ -1,3 +1,17 @@
+nilfs2-kmod7-1.2.13  Sun Feb 11, 2024 JST
+
+	* backport fixes for a data corruption issue, mmap-related hangs and
+	  recovery failures, potential kernel panics, and a log writer freeze
+	  handling issue:
+	  - nilfs2: fix hang in nilfs_lookup_dirty_data_buffers()
+	  - nilfs2: fix data corruption in dsync block recovery for small
+	    block sizes
+	  - nilfs2: fix potential bug in end_buffer_async_write
+	  - nilfs2: add missing set_freezable() for freezable kthread
+	* backport a patch that replaces potentially problematic state
+	  inconsistency checks with warning message output:
+	  - nilfs2: switch WARN_ONs to warning output in nilfs_sufile_do_free()
+
 nilfs2-kmod7-1.2.12  Sat Dec 9, 2023 JST
 
 	* backport fixes for a potential use-after-free issue, problems
