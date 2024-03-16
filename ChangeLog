@@ -1,3 +1,12 @@
+nilfs2-kmod7-1.2.14  Sat Mar 16, 2024 JST
+
+	* backport fixes for potential issues that could cause a buffer I/O
+	  routine to trigger a kernel bug due to writes to file systems whose
+	  DAT metadata is corrupted or unexpected write races:
+	  - nilfs2: fix failure to detect DAT corruption in btree and direct
+	    mappings
+	  - nilfs2: prevent kernel bug at submit_bh_wbc()
+
 nilfs2-kmod7-1.2.13  Sun Feb 11, 2024 JST
 
 	* backport fixes for a data corruption issue, mmap-related hangs and
