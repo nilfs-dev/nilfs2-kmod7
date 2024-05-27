@@ -1,3 +1,22 @@
+nilfs2-kmod7-1.2.15  Mon May 27, 2024 JST
+
+	* backport fixes for a few issues with the log writer, including
+	  potential use-after-free and hang issues on unmount, and potential
+	  sync operation freezes:
+	  - nilfs2: fix use-after-free of timer for log writer thread
+	  - nilfs2: fix unexpected freezing of nilfs_segctor_sync()
+	  - nilfs2: fix potential hang in nilfs_detach_log_writer()
+	* backport fixes for potential issues with finishing block writes in
+	  rollforward recovery on mount:
+	  - nilfs2: make block erasure safe in nilfs_finish_roll_forward()
+	  - nilfs2: convert BUG_ON() in nilfs_finish_roll_forward() to
+	    WARN_ON()
+	* backport a fix for one potential array out-of-bounds access issue
+	  around the directory code:
+	  - nilfs2: fix OOB in nilfs_set_de_type
+	* backport one environment-dependent build warning fix:
+	  - nilfs2: fix out-of-range warning
+
 nilfs2-kmod7-1.2.14  Sat Mar 16, 2024 JST
 
 	* backport fixes for potential issues that could cause a buffer I/O
